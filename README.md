@@ -4,4 +4,4 @@ I am a humble messenger of Gotouge-sensei! Expect deep quotes, unexpected laughs
 
 Breath of Inspiration, First Form: Gotouge Quote Spam! 🐊⚔😤🌟
 
-![image of the bots Discord profile](image.png)
+![image of the bots Discord profile](profile%20image.png)
