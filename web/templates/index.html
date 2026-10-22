@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gotouge Quotes Manager</title>
+
+    <!-- Bootstrap 5 -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet">
+
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+    body {
+      background: #f8f9fa;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .quote-card {
+      border-radius: 15px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+      background: #fff;
+    }
+    .quote-card:hover {
+      transform: translateY(-5px);
+    }
+    .quote-img {
+      max-height: 200px;
+      object-fit: cover;
+      border-radius: 10px;
+      width: 100%;
+    }
+    .header-title {
+      font-weight: 800;
+      color: #0d6efd;
+      font-size: 2.5rem;
+    }
+    .btn-primary, .btn-danger {
+      transition: background-color 0.3s, transform 0.3s;
+    }
+    .btn-primary:hover, .btn-danger:hover {
+      transform: translateY(-2px);
+    }
+  </style>
+  </head>
+  <script>
+    function openEditModal(button) {
+      const quoteId = button.getAttribute('data-id');
+      fetch(`/quote/${quoteId}`)
+        .then(res => res.json())
+        .then(data => {
+          document.getElementById('edit-id').value = data.id;
+          document.getElementById('edit-text').value = data.text;
+          document.getElementById('edit-image-url').value = data.image || '';
+          document.getElementById('editForm').action = `/update/${data.id}`;
+          const modal = new bootstrap.Modal(document.getElementById('editModal'));
+          modal.show();
+        });
+    }
+  </script>
+  <body>
+
+    <div class="container py-5">
+      <h1 class="text-center header-title mb-5">🌸 Gotouge Quotes Manager
+        🌸</h1>
+
+      <!-- Add Quote Form -->
+      <div class="card shadow-sm mb-5">
+        <div class="card-body">
+          <form id="addForm" action="/add" method="post"
+            enctype="multipart/form-data">
+            <div class="mb-3">
+              <label class="form-label">Quote:</label>
+              <input type="text" name="text" class="form-control" required
+                placeholder="Enter a quote from Demon Slayer...">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Image URL (optional):</label>
+              <input type="text" name="image" class="form-control"
+                placeholder="https://example.com/image.png">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Or Upload Image:</label>
+              <input type="file" name="upload" accept="image/*"
+                class="form-control">
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Add
+              Quote</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Quotes List -->
+      <div class="row">
+        {% for quote in quotes %}
+        <div class="col-md-6 col-lg-4 mb-4">
+          <div class="card quote-card h-100 p-3">
+            <div class="card-body d-flex flex-column">
+              <p class="card-text flex-grow-1"><strong>{{ quote.text
+                  }}</strong></p>
+              {% if quote.image %}
+              <img src="{{ quote.image }}" alt="Quote image"
+                class="quote-img mt-3">
+              {% endif %}
+              <form class="deleteForm mt-3" action="/delete/{{ quote._id }}"
+                method="get">
+                <button type="button" class="btn btn-secondary w-100" data-id="{{ quote._id }}"
+                  onclick="openEditModal(this)">Edit</button>
+                <button type="submit"
+                  class="btn btn-danger w-100">Delete</button>
+              </form>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+    </div>
+<!-- Edit Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form id="editForm" method="post" enctype="multipart/form-data">
+        <div class="modal-header">
+          <h5 class="modal-title">Edit Quote</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" name="id" id="edit-id">
+          <div class="mb-3">
+            <label class="form-label">Quote Text</label>
+            <input type="text" class="form-control" name="text" id="edit-text" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Image URL (optional)</label>
+            <input type="text" class="form-control" name="image" id="edit-image-url">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Or Upload New Image</label>
+            <input type="file" name="upload" accept="image/*" class="form-control">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+    
+    <!-- Bootstrap Bundle -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- SweetAlert2 Success Toasts -->
+    <script>
+    const addForm = document.getElementById('addForm');
+    const deleteForms = document.querySelectorAll('.deleteForm');
+
+    addForm.addEventListener('submit', (e) => {
+      setTimeout(() => {
+        Swal.fire({
+          toast: true,
+          icon: 'success',
+          title: 'Quote added!',
+          animation: false,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 2000,
+          timerProgressBar: true,
+        });
+      }, 500); // delay to allow page to reload
+    });
+
+    deleteForms.forEach(form => {
+      form.addEventListener('submit', (e) => {
+        setTimeout(() => {
+          Swal.fire({
+            toast: true,
+            icon: 'info',
+            title: 'Quote deleted!',
+            animation: false,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true,
+          });
+        }, 500);
+      });
+    });
+  </script>
+
+  </body>
+</html>
