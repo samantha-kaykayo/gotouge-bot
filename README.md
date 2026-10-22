@@ -12,6 +12,6 @@ Click here to add it to your server: [invite](https://discord.com/oauth2/authori
 **app id: 1365018500472766524.**
 ### Here are some screenies 
 ![image of the bots Discord profile](profile%20image.png)
-<img width="500" alt="profile" src="profile%20image.png"
+<img width="500" alt="profile" src="profile image.png" />
 <img width="679" height="206" alt="image" src="https://github.com/user-attachments/assets/6e06172e-f004-42ec-9647-d5cebc046611" />
 
