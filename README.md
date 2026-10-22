@@ -11,5 +11,6 @@ Click here to add it to your server: [invite](https://discord.com/oauth2/authori
 
 ### Here are some screenies 
 <img width="500" alt="profile" src="profile image.png" />
-<img width="679" height="206" alt="image" src="https://github.com/user-attachments/assets/6e06172e-f004-42ec-9647-d5cebc046611" />
+<img width="400" alt="image" src="https://github.com/user-attachments/assets/6e06172e-f004-42ec-9647-d5cebc046611" />
 
+[Terms of Service](Tos.md) [Privacy Policy](privacy%policy.md)
